@@ -1,6 +1,22 @@
+exports.customError = (err, req, res, next)=>{
+    if(err.status && err.message){
+        res.status(err.status).send({
+            message: err.message
+        });
+    }else{
+        next(err);
+    }
+}
+
 exports.errorHandler = (err, req, res, next)=>{
-    // TODO actually handle errors
-    res.status(500).send({msg: "Generic error"})
+    //console.log("Error Code: ", err.code)
+
+    // PSQL error for invalid input syntax
+    if(err.code === "22P02"){
+        res.status(400).send({msg: "400 Invalid input"})
+    }else{
+        res.status(500).send({msg: "Generic error"})
+    }
 }
 
 exports.notFound = (req, res, next)=>{

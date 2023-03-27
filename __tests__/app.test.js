@@ -11,7 +11,7 @@ beforeEach(() =>
 afterAll(() => db.end());
 
 describe("GET: /api/categories", ()=>{
-    test("200: Response is an array", ()=>{
+    test("200: Respond with an array containing objects with correct formatting", ()=>{
         return request(app)
             .get("/api/categories")
             .expect(200)
@@ -19,16 +19,6 @@ describe("GET: /api/categories", ()=>{
                 const { categories } = body;
 
                 expect(categories).toBeInstanceOf(Array);
-            })
-    })
-
-    test("200: Correctly formatted object in response", ()=>{
-        return request(app)
-            .get("/api/categories")
-            .expect(200)
-            .then(({body})=>{
-                const { categories } = body;
-                console.log(categories)
                 expect(categories.length).toBe(4);
 
                 categories.forEach((category) => {
@@ -37,6 +27,17 @@ describe("GET: /api/categories", ()=>{
                         description: expect.any(String),
                     });
                 }); 
+            })
+    })
+})
+
+describe("Error Handling", ()=>{
+    test("404: When given non-existent path respond with 404 error", ()=>{
+        return request(app)
+            .get("/not-a-path")
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe("404 path not found")
             })
     })
 })

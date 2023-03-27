@@ -31,6 +31,41 @@ describe("GET: /api/categories", ()=>{
     })
 })
 
+describe("GET: /api/reviews/:review_id", ()=>{
+    test("200: Respond with object of review at id", ()=>{
+        return request(app)
+            .get("/api/reviews/1")
+            .expect(200)
+            .then(({body})=>{
+                const { review } = body;
+
+                expect(review).toBeInstanceOf(Object);
+
+                // review_id
+                // title
+                // review_body
+                // designer
+                // review_img_url
+                // votes
+                // category
+                // owner
+                // created_at
+        
+                expect(review).toMatchObject({
+                    review_id: expect.any(Number),
+                    title: expect.any(String),
+                    review_body: expect.any(String),
+                    designer: expect.any(String),
+                    review_img_url: expect.any(String),
+                    votes: expect.any(Number),
+                    category: expect.any(String),
+                    owner: expect.any(String),
+                    created_at: expect.any(String),
+                });
+            })
+    })
+})
+
 describe("Error Handling", ()=>{
     test("404: When given non-existent path respond with 404 error", ()=>{
         return request(app)

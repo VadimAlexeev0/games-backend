@@ -78,7 +78,6 @@ describe("Error Handling", ()=>{
                 .get("/api/reviews/200")
                 .expect(404)
                 .then(({body})=>{
-                    console.log(body)
                     expect(body.message).toBe("404 ID Not found")
                 })
         })

@@ -39,18 +39,8 @@ describe("GET: /api/reviews/:review_id", ()=>{
             .then(({body})=>{
                 const { review } = body;
 
-                expect(review).toBeInstanceOf(Object);
-
-                // review_id
-                // title
-                // review_body
-                // designer
-                // review_img_url
-                // votes
-                // category
-                // owner
-                // created_at
-        
+                expect(review).toBeObject()
+    
                 expect(review).toMatchObject({
                     review_id: expect.any(Number),
                     title: expect.any(String),
@@ -73,6 +63,15 @@ describe("Error Handling", ()=>{
             .expect(404)
             .then(({body})=>{
                 expect(body.msg).toBe("404 path not found")
+            })
+    })
+
+    test("400: When given non numerical param on /api/reviews/:review_id", ()=>{
+        return request(app)
+            .get("/api/reviews/not_a_number")
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe("400 Invalid input")
             })
     })
 })

@@ -1,6 +1,6 @@
 const express = require("express");
 
-const {errorHandler, notFound} = require("./controllers/errorHandler")
+const {customError, errorHandler, notFound} = require("./controllers/errorHandler")
 
 const { getCategories } = require("./controllers/categories")
 
@@ -13,6 +13,8 @@ app.get("/api/categories", getCategories);
 
 app.get("/api/reviews/:review_id", getReviewByID);
 
+//Error Handling
+app.use(customError)
 app.use(errorHandler)
 
 // Handle non matching routes (Required to be at bottom of stack)

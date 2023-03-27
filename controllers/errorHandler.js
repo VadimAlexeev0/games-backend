@@ -1,3 +1,13 @@
+exports.customError = (err, req, res, next)=>{
+    if(err.status && err.message){
+        res.status(err.status).send({
+            message: err.message
+        });
+    }else{
+        next(err);
+    }
+}
+
 exports.errorHandler = (err, req, res, next)=>{
     //console.log("Error Code: ", err.code)
 
@@ -7,7 +17,6 @@ exports.errorHandler = (err, req, res, next)=>{
     }else{
         res.status(500).send({msg: "Generic error"})
     }
-
 }
 
 exports.notFound = (req, res, next)=>{

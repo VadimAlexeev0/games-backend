@@ -73,7 +73,7 @@ describe("Error Handling", ()=>{
                 })
         })
 
-        test.only("404: When id valid but not existant", ()=>{
+        test("404: When id valid but not existant", ()=>{
             return request(app)
                 .get("/api/reviews/200")
                 .expect(404)

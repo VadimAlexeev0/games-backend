@@ -21,4 +21,22 @@ describe("GET: /api/categories", ()=>{
                 expect(categories).toBeInstanceOf(Array);
             })
     })
+
+    test("200: Correctly formatted object in response", ()=>{
+        return request(app)
+            .get("/api/categories")
+            .expect(200)
+            .then(({body})=>{
+                const { categories } = body;
+                console.log(categories)
+                expect(categories.length).toBe(4);
+
+                categories.forEach((category) => {
+                    expect(category).toMatchObject({
+                        slug: expect.any(String),
+                        description: expect.any(String),
+                    });
+                }); 
+            })
+    })
 })

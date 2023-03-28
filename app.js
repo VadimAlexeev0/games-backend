@@ -1,10 +1,14 @@
 const express = require("express");
 
-const {customError, errorHandler, notFound} = require("./controllers/errorHandler")
-
-const { getCategories } = require("./controllers/categories")
-
-const { getReviewByID, getReviews } = require("./controllers/reviews")
+const { 
+    getCategories,
+    getReviewByID,
+    getReviews,
+    getCommentByReviewID,
+    customError,
+    errorHandler,
+    notFound  
+} = require("./controllers")
 
 const app = express();
 
@@ -14,6 +18,8 @@ app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReviewByID);
 
 app.get("/api/reviews", getReviews);
+
+app.get("/api/reviews:review_id/comments", getCommentByReviewID);
 
 //Error Handling
 app.use(customError)

@@ -1,4 +1,4 @@
-const {fetchSingleReview, fetchReviews} = require("../models/reviews")
+const {fetchSingleReview, fetchReviews} = require("../models")
 
 exports.getReviewByID = (req, res, next)=>{
     const { review_id } = req.params;

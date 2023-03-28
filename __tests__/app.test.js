@@ -54,6 +54,37 @@ describe("GET: /api/reviews/:review_id", ()=>{
     })
 })
 
+describe("GET: /api/reviews",()=>{
+    test("200: Respond with array containing reviews", ()=>{
+        return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then(({body})=>{
+                const { reviews } = body;
+                
+
+                expect(reviews).toBeInstanceOf(Array);
+                expect(reviews.length).toBe(15);
+
+                reviews.forEach((review)=>{
+                    expect(review).toMatchObject({
+                        review_id: expect.any(Number),
+                        title: expect.any(String),
+                        designer: expect.any(String),
+                        review_img_url: expect.any(String),
+                        votes: expect.any(Number),
+                        category: expect.any(String),
+                        owner: expect.any(String),
+                        created_at: expect.any(String),
+                        comment_count: expect.any(Number)
+                    });
+                })
+
+                expect(reviews).toBeSortedBy('created_at', { descending: true });
+            })
+    })
+})
+
 describe("Error Handling", ()=>{
     test("404: When given non-existent path respond with 404 error", ()=>{
         return request(app)

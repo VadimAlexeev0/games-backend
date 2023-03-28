@@ -19,7 +19,7 @@ app.get("/api/reviews/:review_id", getReviewByID);
 
 app.get("/api/reviews", getReviews);
 
-app.get("/api/reviews:review_id/comments", getCommentByReviewID);
+app.get("/api/reviews/:review_id/comments", getCommentByReviewID);
 
 //Error Handling
 app.use(customError)

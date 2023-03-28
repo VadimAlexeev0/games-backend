@@ -8,7 +8,7 @@ exports.getReviewByID = (req, res, next)=>{
         if(!review){
             next({
                 status: 404,
-                message: "404 ID Not found"
+                msg: "404 ID Not found"
             })
         }
 

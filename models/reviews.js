@@ -34,6 +34,7 @@ exports.fetchReviews = () => {
             reviews.created_at,
             comments.votes,
             designer
+        ORDER BY reviews.created_at DESC
     `).then((data)=>{
         return data.rows;
     })

@@ -22,15 +22,12 @@ exports.getReviewByID = (req, res, next)=>{
 }
 
 exports.getReviews = (req, res, next) => {
-    console.log("bro pls")
     fetchReviews().then((reviews)=>{
-        console.log(reviews)
         res.status(200).send({
             "reviews": reviews
         })
     })
     .catch((err)=>{
-        console.log(err)
         next(err)
     })
 }

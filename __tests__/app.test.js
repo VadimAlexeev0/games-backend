@@ -79,6 +79,8 @@ describe("GET: /api/reviews",()=>{
                         comment_count: expect.any(Number)
                     });
                 })
+
+                expect(reviews).toBeSortedBy('created_at', { descending: true });
             })
     })
 })

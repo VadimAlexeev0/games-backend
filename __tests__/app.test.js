@@ -85,7 +85,7 @@ describe("GET: /api/reviews",()=>{
     })
 })
 
-describe("GET: /api/reviews/1/comments", ()=>{
+describe("GET: /api/reviews/3/comments", ()=>{
     test("200: Respond with array of comments for given ID", ()=>{
         return request(app)
             .get("/api/reviews/3/comments")

@@ -7,11 +7,14 @@ const {
     getReviewByID,
     getReviews,
     getCommentByReviewID,
+    postCommentByReviewID
 } = require("./controllers")
 
 const app = express();
 
+app.use(express.json())
 
+// Routes
 app.get("/api/categories", getCategories);
 
 app.get("/api/reviews/:review_id", getReviewByID);
@@ -19,6 +22,8 @@ app.get("/api/reviews/:review_id", getReviewByID);
 app.get("/api/reviews", getReviews);
 
 app.get("/api/reviews/:review_id/comments", getCommentByReviewID);
+
+app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
 
 //Error Handling
 app.use(customError)

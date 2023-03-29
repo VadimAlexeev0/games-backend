@@ -132,6 +132,32 @@ describe("GET: /api/reviews/:review_id/comments", ()=>{
     })
 })
 
+describe("POST: /api/reviews/:review_id/comments", ()=>{
+    test("201: Respond with new comment", ()=>{
+        const requestBody = {
+            username: "dav3rid",
+            body: "Very positive review"
+        }
+
+        return request(app)
+            .post("/api/reviews/1/comments")
+            .send(requestBody)
+            .expect(201)
+            .then(({body})=>{
+                const { newComment } = body;
+                console.log(newComment)
+                expect(newComment).toMatchObject({
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    comment_id: expect.any(Number),
+                    created_at: expect.any(String),
+                    review_id: expect.any(Number),
+                    votes: expect.any(Number)
+                })
+            })
+    })
+})
+
 describe("Error Handling", ()=>{
     test("404: When given non-existent path respond with 404 error", ()=>{
         return request(app)

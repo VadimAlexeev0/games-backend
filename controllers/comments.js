@@ -1,4 +1,4 @@
-const { fetchCommentByReviewID } = require("../models");
+const { fetchCommentByReviewID, newComment } = require("../models");
 
 exports.getCommentByReviewID = (req, res, next) => {
     const { review_id } = req.params;
@@ -11,4 +11,19 @@ exports.getCommentByReviewID = (req, res, next) => {
     .catch((err)=>{
         next(err)
     })
+}
+
+exports.postCommentByReviewID = (req, res) => {
+    const { review_id } = req.params;
+    
+    const { username, body } = req.body;
+    if(!username || !body){
+        console.log("Missing data")
+    }
+    newComment(review_id, username, body).then((comment)=>{
+        res.status(201).send({
+            "newComment": comment
+        })
+    })
+
 }

@@ -1,4 +1,4 @@
-const {fetchSingleReview, fetchReviews} = require("../models/reviews")
+const {fetchSingleReview, fetchReviews} = require("../models")
 
 exports.getReviewByID = (req, res, next)=>{
     const { review_id } = req.params;
@@ -8,7 +8,7 @@ exports.getReviewByID = (req, res, next)=>{
         if(!review){
             next({
                 status: 404,
-                message: "404 ID Not found"
+                msg: "404 ID Not found"
             })
         }
 

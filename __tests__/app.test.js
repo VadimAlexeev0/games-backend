@@ -31,7 +31,7 @@ describe("GET: /api/categories", ()=>{
     })
 })
 
-describe("GET: /api/reviews/:review_id", ()=>{
+describe("GET: /api/reviews/:review_id", () => {
     test("200: Respond with object of review at id", ()=>{
         return request(app)
             .get("/api/reviews/1")
@@ -66,7 +66,7 @@ describe("GET: /api/reviews",()=>{
                 expect(reviews).toBeInstanceOf(Array);
                 expect(reviews.length).toBe(15);
 
-                reviews.forEach((review)=>{
+                reviews.forEach((review) => {
                     expect(review).toMatchObject({
                         review_id: expect.any(Number),
                         title: expect.any(String),
@@ -81,6 +81,53 @@ describe("GET: /api/reviews",()=>{
                 })
 
                 expect(reviews).toBeSortedBy('created_at', { descending: true });
+            })
+    })
+})
+
+describe("GET: /api/reviews/:review_id/comments", ()=>{
+    test("200: Respond with array of comments for given ID", ()=>{
+        return request(app)
+            .get("/api/reviews/3/comments")
+            .expect(200)
+            .then(({body})=>{
+                const { comments } = body;
+
+                expect(comments).toBeInstanceOf(Array);
+                expect(comments.length).toBe(3);
+
+                comments.forEach((comment) => {
+                    expect(comment).toMatchObject({
+                        comment_id: expect.any(Number),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        review_id: expect.any(Number)
+                    })
+                })
+                // Check sort
+                expect(comments).toBeSortedBy("created_at", { descending: true})
+            })
+    })
+    test("200: Return empty array when ID valid but non-existent ", ()=>{
+        return request(app)
+            .get("/api/reviews/20/comments")
+            .expect(200)
+            .then(({body})=>{
+                const { comments } = body;
+                
+                expect(comments).toEqual([]);
+            })
+    })
+    test("200: Return Empty array When no comments on review", ()=>{
+        return request(app)
+            .get("/api/reviews/1/comments")
+            .expect(200)
+            .then(({body})=>{
+                const { comments } = body;
+                
+                expect(comments).toEqual([]);
             })
     })
 })
@@ -104,14 +151,24 @@ describe("Error Handling", ()=>{
                 })
         })
 
-        test("404: When id valid but not existant", ()=>{
+        test("404: When id valid but non-existent", ()=>{
             return request(app)
                 .get("/api/reviews/200")
                 .expect(404)
                 .then(({body})=>{
-                    expect(body.message).toBe("404 ID Not found")
+                    expect(body.msg).toBe("404 ID Not found")
                 })
         })
     })
 
+    describe("/api/reviews/:review_id/comments", ()=>{
+        test("400: When given non numerical param", ()=>{
+            return request(app)
+                .get("/api/reviews/random/comments")
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe("400 Invalid input")
+                })
+        })
+    })
 })

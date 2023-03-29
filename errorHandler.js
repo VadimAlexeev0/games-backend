@@ -1,7 +1,7 @@
 exports.customError = (err, req, res, next)=>{
-    if(err.status && err.message){
+    if(err.status && err.msg){
         res.status(err.status).send({
-            message: err.message
+            msg: err.msg
         });
     }else{
         next(err);

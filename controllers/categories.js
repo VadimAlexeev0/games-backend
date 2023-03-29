@@ -1,4 +1,4 @@
-const {fetchCategories} = require("../models/categories")
+const {fetchCategories} = require("../models")
 
 exports.getCategories = (req,res)=>{
     fetchCategories().then((categories)=>{

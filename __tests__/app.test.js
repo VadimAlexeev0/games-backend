@@ -85,7 +85,7 @@ describe("GET: /api/reviews",()=>{
     })
 })
 
-describe("GET: /api/reviews/3/comments", ()=>{
+describe("GET: /api/reviews/:review_id/comments", ()=>{
     test("200: Respond with array of comments for given ID", ()=>{
         return request(app)
             .get("/api/reviews/3/comments")
@@ -111,15 +111,25 @@ describe("GET: /api/reviews/3/comments", ()=>{
             })
     })
     test("200: Return empty array when ID valid but non-existent ", ()=>{
-            return request(app)
-                .get("/api/reviews/20/comments")
-                .expect(200)
-                .then(({body})=>{
-                    const { comments } = body;
-                    
-                    expect(comments).toEqual([]);
-                })
-        })
+        return request(app)
+            .get("/api/reviews/20/comments")
+            .expect(200)
+            .then(({body})=>{
+                const { comments } = body;
+                
+                expect(comments).toEqual([]);
+            })
+    })
+    test("200: Return Empty array When no comments on review", ()=>{
+        return request(app)
+            .get("/api/reviews/1/comments")
+            .expect(200)
+            .then(({body})=>{
+                const { comments } = body;
+                console.log(comments)
+                expect(comments).toEqual([]);
+            })
+    })
 })
 
 describe("Error Handling", ()=>{

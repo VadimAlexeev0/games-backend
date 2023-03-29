@@ -110,6 +110,16 @@ describe("GET: /api/reviews/3/comments", ()=>{
                 expect(comments).toBeSortedBy("created_at", { descending: true})
             })
     })
+    test("200: Return empty array when ID valid but non-existent ", ()=>{
+            return request(app)
+                .get("/api/reviews/20/comments")
+                .expect(200)
+                .then(({body})=>{
+                    const { comments } = body;
+                    
+                    expect(comments).toEqual([]);
+                })
+        })
 })
 
 describe("Error Handling", ()=>{
@@ -148,15 +158,6 @@ describe("Error Handling", ()=>{
                 .expect(400)
                 .then(({body})=>{
                     expect(body.msg).toBe("400 Invalid input")
-                })
-        })
-
-        test("404: When ID valid but non-existent ", ()=>{
-            return request(app)
-                .get("/api/reviews/20/comments")
-                .expect(404)
-                .then(({body})=>{
-                    expect(body.msg).toBe("404 No comments found")
                 })
         })
     })

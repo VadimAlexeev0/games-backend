@@ -1,13 +1,12 @@
 const express = require("express");
 
+const { customError, errorHandler, notFound } = require("./errorHandler")
+
 const { 
     getCategories,
     getReviewByID,
     getReviews,
     getCommentByReviewID,
-    customError,
-    errorHandler,
-    notFound  
 } = require("./controllers")
 
 const app = express();

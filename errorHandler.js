@@ -9,12 +9,14 @@ exports.customError = (err, req, res, next)=>{
 }
 
 exports.errorHandler = (err, req, res, next)=>{
-    //console.log("Error Code: ", err.code)
+    //console.log("Error: ", err)
 
-    // PSQL error for invalid input syntax
+    // PSQL errors
     if(err.code === "22P02"){
         res.status(400).send({msg: "400 Invalid input"})
-    }else{
+    } else if(err.code === "23503"){
+        res.status(404).send({msg: "404 Invalid ID"})
+    } else{
         res.status(500).send({msg: "Generic error"})
     }
 }

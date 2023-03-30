@@ -10,3 +10,24 @@ exports.fetchCommentByReviewID = (reviewID) => {
         return data.rows;
     })
 }
+
+exports.newComment = (id, author, body) => {
+    return db.query(`
+        INSERT INTO comments
+        (review_id, author, body)
+        VALUES($1, $2, $3)
+        RETURNING *
+    `, [id, author, body]).then((data)=>{
+        return data.rows[0];
+    })
+}
+
+exports.usernameExists = (findUsername) => {
+    return db.query(`
+        SELECT username
+        FROM users
+    `).then(({rows}) => {
+        const exists = rows.find(({ username }) => username === findUsername);
+        return exists;
+    })
+}

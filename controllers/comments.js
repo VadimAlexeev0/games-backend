@@ -1,4 +1,4 @@
-const { fetchCommentByReviewID, newComment } = require("../models");
+const { fetchCommentByReviewID, newComment, usernameExists } = require("../models");
 
 exports.getCommentByReviewID = (req, res, next) => {
     const { review_id } = req.params;
@@ -23,11 +23,21 @@ exports.postCommentByReviewID = (req, res, next) => {
             msg: "400 Request Body Malformed"
         })
     }
-    newComment(review_id, username, body).then((comment)=>{
-        res.status(201).send({
-            "newComment": comment
-        })
+    usernameExists(username).then((exists)=>{
+        console.log(exists)
+        if(exists){
+            newComment(review_id, username, body).then((comment)=>{
+                res.status(201).send({
+                    "newComment": comment
+                })
+            })
+            .catch(err => next(err));
+        } else{
+            next({
+                status: 404,
+                msg: "404 Username does not exist"
+            })
+        }
     })
-    .catch(err => next(err));
-
+    
 }

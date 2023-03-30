@@ -21,3 +21,13 @@ exports.newComment = (id, author, body) => {
         return data.rows[0];
     })
 }
+
+exports.usernameExists = (findUsername) => {
+    return db.query(`
+        SELECT username
+        FROM users
+    `).then(({rows}) => {
+        const exists = rows.find(({ username }) => username === findUsername);
+        return exists;
+    })
+}

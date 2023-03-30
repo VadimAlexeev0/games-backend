@@ -18,7 +18,6 @@ exports.postCommentByReviewID = (req, res, next) => {
     
     const { username, body } = req.body;
     if(!username || !body){
-        console.log("Missing data")
         next({
             status: 400,
             msg: "400 Request Body Malformed"

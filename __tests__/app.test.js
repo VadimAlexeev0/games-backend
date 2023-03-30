@@ -240,7 +240,7 @@ describe("POST: /api/reviews/:review_id/comments", ()=>{
     })
 })
 
-describe.only("PATCH: /api/reviews/:review_id", ()=>{
+describe("PATCH: /api/reviews/:review_id", ()=>{
     test("200: Increase votes by provided int", ()=>{
         return request(app)
             .patch("/api/reviews/2")

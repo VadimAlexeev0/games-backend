@@ -6,6 +6,12 @@ exports.fetchSingleReview = (id)=>{
         FROM reviews
         WHERE review_id = $1;
     `, [id]).then((review)=>{
+        if(!review.rows[0]){
+            return Promise.reject({
+                status: 404,
+                msg: "404 ID Not found"
+            })
+        }
         return review.rows[0]
    })
 }
@@ -46,6 +52,12 @@ exports.updateVotes = (reviewID, increaseVote) => {
         WHERE review_id = $2
         RETURNING *
     `, [increaseVote, reviewID]).then((data)=>{
+        if(!data.rows[0]){
+            return Promise.reject({
+                status: 404,
+                msg: "404 Invalid ID"
+            })
+        }
         return data.rows[0]
     })
 }

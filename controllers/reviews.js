@@ -5,13 +5,6 @@ exports.getReviewByID = (req, res, next)=>{
 
     fetchSingleReview(review_id).then((review)=>{
         // If no data returned throw error
-        if(!review){
-            next({
-                status: 404,
-                msg: "404 ID Not found"
-            })
-        }
-
         res.status(200).send({
             "review": review
         })
@@ -43,13 +36,6 @@ exports.patchReviewByID = (req, res, next) => {
         })
     } else {
         updateVotes(review_id, inc_votes).then((updated)=>{
-            console.log(updated)
-            if(!updated) {
-                next({
-                    status: 404, 
-                    msg: "404 Invalid ID"
-                })
-            }
             res.status(200).send({
                 review: updated
             })

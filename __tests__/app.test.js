@@ -145,7 +145,7 @@ describe("POST: /api/reviews/:review_id/comments", ()=>{
             .expect(201)
             .then(({body})=>{
                 const { newComment } = body;
-                console.log(newComment)
+                
                 expect(newComment).toMatchObject({
                     author: expect.any(String),
                     body: expect.any(String),
@@ -167,7 +167,7 @@ describe("Error Handling", ()=>{
                 expect(body.msg).toBe("404 path not found")
             })
     })
-    describe("/api/reviews/:review_id", ()=>{
+    describe("GET: /api/reviews/:review_id", ()=>{
         test("400: When given non numerical param", ()=>{
             return request(app)
                 .get("/api/reviews/not_a_number")
@@ -187,13 +187,34 @@ describe("Error Handling", ()=>{
         })
     })
 
-    describe("/api/reviews/:review_id/comments", ()=>{
+    describe("GET: /api/reviews/:review_id/comments", ()=>{
         test("400: When given non numerical param", ()=>{
             return request(app)
                 .get("/api/reviews/random/comments")
                 .expect(400)
                 .then(({body})=>{
                     expect(body.msg).toBe("400 Invalid input")
+                })
+        })
+    })
+
+    describe("POST: /api/reviews/:review_id/comments", ()=>{
+        test("400: When given non numerical review_id", ()=>{
+            return request(app)
+                .post("/api/reviews/NaN/comments")
+                .send({username: "test", body: "test"})
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe("400 Invalid input")
+                })
+        })
+        test("400: When missing key in body", ()=>{
+            return request(app)
+                .post("/api/reviews/5/comments")
+                .send({ username: "dav3rid"})
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe("400 Request Body Malformed")
                 })
         })
     })

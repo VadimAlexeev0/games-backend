@@ -24,7 +24,6 @@ exports.postCommentByReviewID = (req, res, next) => {
         })
     }
     usernameExists(username).then((exists)=>{
-        console.log(exists)
         if(exists){
             newComment(review_id, username, body).then((comment)=>{
                 res.status(201).send({

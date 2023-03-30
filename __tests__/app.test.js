@@ -10,6 +10,15 @@ beforeEach(() =>
 
 afterAll(() => db.end());
 
+test("404: When given non-existent path respond with 404 error", ()=>{
+    return request(app)
+        .get("/not-a-path")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("404 path not found")
+        })
+})
+
 describe("GET: /api/categories", ()=>{
     test("200: Respond with an array containing objects with correct formatting", ()=>{
         return request(app)
@@ -231,11 +240,63 @@ describe("POST: /api/reviews/:review_id/comments", ()=>{
     })
 })
 
-test("404: When given non-existent path respond with 404 error", ()=>{
-    return request(app)
-        .get("/not-a-path")
-        .expect(404)
-        .then(({body})=>{
-            expect(body.msg).toBe("404 path not found")
-        })
+describe.only("PATCH: /api/reviews/:review_id", ()=>{
+    test("200: Increase votes by provided int", ()=>{
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({
+                inc_votes: 1
+            })
+            .expect(200)
+            .then(({body})=>{
+                const { review } = body
+
+                expect(review.votes).toBe(6)
+            })
+    })
+    test("200: Decrease votes by provided int", ()=>{
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({
+                inc_votes: -3
+            })
+            .expect(200)
+            .then(({body})=>{
+                const { review } = body
+                expect(review.votes).toBe(2)
+            })
+    })
+    test("400: When missing inc_votes key", ()=>{
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({})
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe("400 Missing inc_votes key")
+            })
+    })
+
+    test("400: When inc_votes not integer", ()=>{
+        return request(app)
+            .patch("/api/reviews/NaN")
+            .send({
+                inc_votes: 10
+            })
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe("400 Invalid input")
+            })
+    })
+
+    test("404: review_id not valid", ()=>{
+        return request(app)
+            .patch("/api/reviews/9999")
+            .send({
+                inc_votes: 10
+            })
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe("404 Invalid ID")
+            })
+    })
 })

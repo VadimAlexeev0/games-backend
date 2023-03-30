@@ -39,3 +39,13 @@ exports.fetchReviews = () => {
         return data.rows;
     })
 }
+exports.updateVotes = (reviewID, increaseVote) => {
+    return db.query(`
+        UPDATE reviews
+            SET votes = votes + $1
+        WHERE review_id = $2
+        RETURNING *
+    `, [increaseVote, reviewID]).then((data)=>{
+        return data.rows[0]
+    })
+}

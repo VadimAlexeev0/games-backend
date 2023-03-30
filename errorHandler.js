@@ -9,7 +9,7 @@ exports.customError = (err, req, res, next)=>{
 }
 
 exports.errorHandler = (err, req, res, next)=>{
-    //console.log("Error: ", err)
+    console.log("Error: ", err)
 
     // PSQL errors
     if(err.code === "22P02"){

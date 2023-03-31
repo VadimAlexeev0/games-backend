@@ -6,6 +6,12 @@ exports.fetchSingleReview = (id)=>{
         FROM reviews
         WHERE review_id = $1;
     `, [id]).then((review)=>{
+        if(!review.rows[0]){
+            return Promise.reject({
+                status: 404,
+                msg: "404 ID Not found"
+            })
+        }
         return review.rows[0]
    })
 }
@@ -37,5 +43,21 @@ exports.fetchReviews = () => {
         ORDER BY reviews.created_at DESC
     `).then((data)=>{
         return data.rows;
+    })
+}
+exports.updateVotes = (reviewID, increaseVote) => {
+    return db.query(`
+        UPDATE reviews
+            SET votes = votes + $1
+        WHERE review_id = $2
+        RETURNING *
+    `, [increaseVote, reviewID]).then((data)=>{
+        if(data.rows.length === 0){
+            return Promise.reject({
+                status: 404,
+                msg: "404 Review ID Not found"
+            })
+        }
+        return data.rows[0]
     })
 }

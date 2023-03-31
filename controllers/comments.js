@@ -1,4 +1,4 @@
-const { fetchCommentByReviewID, newComment, usernameExists } = require("../models");
+const { fetchCommentByReviewID, newComment, usernameExists,deleteComment, checkCommentExists } = require("../models");
 
 exports.getCommentByReviewID = (req, res, next) => {
     const { review_id } = req.params;
@@ -38,5 +38,14 @@ exports.postCommentByReviewID = (req, res, next) => {
             })
         }
     })
-    
+}
+
+exports.deleteCommentByID = (req, res, next) =>{
+    const {comment_id} = req.params;
+    checkCommentExists(comment_id).then(()=>{
+        deleteComment(comment_id).then(()=>{
+            res.status(204).end();
+        })
+    })
+    .catch(err => next(err))
 }

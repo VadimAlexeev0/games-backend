@@ -1,4 +1,4 @@
-const { fetchUsers } = require('../models/users');
+const { fetchUsers } = require('../models');
 
 exports.getUsers = (req, res, err) => {
     fetchUsers().then((users)=> {

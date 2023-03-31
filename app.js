@@ -9,7 +9,7 @@ const {
     getCommentByReviewID,
     postCommentByReviewID,
     patchReviewByID,
-    deleteCommentByID
+    deleteCommentByID,
     getUsers
 } = require("./controllers")
 

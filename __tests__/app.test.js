@@ -301,6 +301,35 @@ describe("PATCH: /api/reviews/:review_id", ()=>{
     })
 })
 
+describe("DELETE: /api/comments/:comment_id", ()=>{
+    test("204: Remove comment_id from DB", ()=>{
+        return request(app)
+            .delete("/api/comments/1")
+            .expect(204)
+            .then(({body})=>{
+                expect(body).toEqual({})
+            })
+    })
+
+    test("400: Incorrect comment ID", ()=>{
+        return request(app)
+            .delete("/api/comments/NaN")
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe("400 Invalid input")
+            })
+    })
+
+    test("404: Valid comment ID but non existant", ()=>{
+        return request(app)
+            .delete("/api/comments/999")
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe("404 Comment ID not found")
+            })
+    })
+})
+
 describe("GET: /api/users", ()=>{
     test("200: Return array of user object", ()=>{
         return request(app)

@@ -9,6 +9,7 @@ const {
     getCommentByReviewID,
     postCommentByReviewID,
     patchReviewByID,
+    deleteCommentByID
     getUsers
 } = require("./controllers")
 
@@ -28,6 +29,8 @@ app.get("/api/reviews/:review_id/comments", getCommentByReviewID);
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
 
 app.patch("/api/reviews/:review_id", patchReviewByID)
+
+app.delete("/api/comments/:comment_id", deleteCommentByID)
 
 app.get("/api/users", getUsers)
 

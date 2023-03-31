@@ -31,3 +31,24 @@ exports.usernameExists = (findUsername) => {
         return exists;
     })
 }
+
+exports.checkCommentExists = (commentID) => {
+    return db.query(`
+        SELECT *
+        FROM comments
+        WHERE comment_id = $1
+    `, [commentID]).then((result) => {
+        if(result.rowCount === 0){
+            return Promise.reject({
+                status: 404,
+                msg: "404 Comment ID not found"
+            })
+        }
+    })
+}
+
+exports.deleteComment = (commentID) => {
+    return db.query(`
+        SELECT 
+    `)
+} 

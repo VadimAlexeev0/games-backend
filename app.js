@@ -8,7 +8,8 @@ const {
     getReviews,
     getCommentByReviewID,
     postCommentByReviewID,
-    patchReviewByID
+    patchReviewByID,
+    deleteCommentByID
 } = require("./controllers")
 
 const app = express();
@@ -27,6 +28,8 @@ app.get("/api/reviews/:review_id/comments", getCommentByReviewID);
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
 
 app.patch("/api/reviews/:review_id", patchReviewByID)
+
+app.delete("/api/comments/:comment_id", deleteCommentByID)
 
 //Error Handling
 app.use(customError)

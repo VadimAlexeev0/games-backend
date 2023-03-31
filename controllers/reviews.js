@@ -28,18 +28,17 @@ exports.getReviews = (req, res, next) => {
 exports.patchReviewByID = (req, res, next) => {
     const { review_id } = req.params;
     const { inc_votes } = req.body;
-
+    
     if(!inc_votes) {
         next({
             status: 400,
             msg: "400 Missing inc_votes key"
         })
-    } else {
-        updateVotes(review_id, inc_votes).then((updated)=>{
-            res.status(200).send({
-                review: updated
-            })
+    } 
+    updateVotes(review_id, inc_votes).then((updated)=>{
+        res.status(200).send({
+            review: updated
         })
-        .catch(err => next(err))
-    }
+    })
+    .catch(err => next(err))
 }

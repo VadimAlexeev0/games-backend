@@ -52,10 +52,10 @@ exports.updateVotes = (reviewID, increaseVote) => {
         WHERE review_id = $2
         RETURNING *
     `, [increaseVote, reviewID]).then((data)=>{
-        if(!data.rows[0]){
+        if(data.rows.length === 0){
             return Promise.reject({
                 status: 404,
-                msg: "404 Invalid ID"
+                msg: "404 Review ID Not found"
             })
         }
         return data.rows[0]

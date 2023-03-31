@@ -278,9 +278,9 @@ describe("PATCH: /api/reviews/:review_id", ()=>{
 
     test("400: When inc_votes not integer", ()=>{
         return request(app)
-            .patch("/api/reviews/NaN")
+            .patch("/api/reviews/2")
             .send({
-                inc_votes: 10
+                inc_votes: "not a int"
             })
             .expect(400)
             .then(({body})=>{
@@ -296,7 +296,7 @@ describe("PATCH: /api/reviews/:review_id", ()=>{
             })
             .expect(404)
             .then(({body})=>{
-                expect(body.msg).toBe("404 Invalid ID")
+                expect(body.msg).toBe("404 Review ID Not found")
             })
     })
 })

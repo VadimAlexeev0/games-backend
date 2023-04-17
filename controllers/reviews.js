@@ -15,12 +15,26 @@ exports.getReviewByID = (req, res, next)=>{
 }
 
 exports.getReviews = (req, res, next) => {
-    fetchReviews().then((reviews)=>{
+    const { 
+        order = "desc",
+        sort_by = "created_at", 
+        category
+    } = req.query;
+
+    // if(category){
+    //     // Check if category exists
+    // }
+    
+    console.log(order, sort_by, category);
+
+    fetchReviews(order, sort_by, category).then((reviews)=>{
+        console.log(reviews)
         res.status(200).send({
             "reviews": reviews
         })
     })
     .catch((err)=>{
+        console.log(err)
         next(err)
     })
 }

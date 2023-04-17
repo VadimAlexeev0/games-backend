@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require("express");
 
 const { customError, errorHandler, notFound } = require("./errorHandler")
@@ -15,6 +16,7 @@ const {
 
 const app = express();
 
+app.use(cors());
 app.use(express.json())
 
 // Routes

@@ -16,7 +16,47 @@ exports.fetchSingleReview = (id)=>{
    })
 }
 
-exports.fetchReviews = () => {
+exports.fetchReviews = (order, sort, category) => {
+    // const queryString = `
+    //     SELECT
+    //         reviews.title,
+    //         reviews.owner,
+    //         reviews.review_id,
+    //         reviews.category,
+    //         reviews.review_img_url,
+    //         reviews.created_at,
+    //         reviews.designer,
+    //         reviews.votes,
+    //         CAST(COUNT(comments.review_id) AS INT) AS comment_count
+    //     FROM reviews
+    //     FULL OUTER JOIN comments
+    //     ON comments.review_id = reviews.review_id
+    // ` 
+
+    // const queryArray = []
+    
+    // // Category insertion here
+
+    // queryString += `GROUP BY reviews.review_id`
+
+
+
+    // if(order === "asc" || order === "desc"){
+    //     console.log("Correct string")
+    //     //queryString += `ORDER BY ${sort} ${order}`
+    // } else{
+    //     console.log("WRong")
+    //     return Promise.reject({
+    //         status: 400,
+    //         msg: "400 Invalid order query"
+    //     })
+    // }
+
+    // return db.query(queryString, queryArray).then((data) => {
+    //     console.log(data);
+    //     return data.rows;
+    // })
+
     return db.query(`
         SELECT 
             title,

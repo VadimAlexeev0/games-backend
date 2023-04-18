@@ -28,7 +28,7 @@ exports.getReviews = (req, res, next) => {
     console.log(order, sort_by, category);
 
     fetchReviews(order, sort_by, category).then((reviews)=>{
-        console.log(reviews)
+        // console.log(reviews)
         res.status(200).send({
             "reviews": reviews
         })

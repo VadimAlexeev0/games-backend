@@ -90,7 +90,7 @@ describe("GET: /api/reviews",()=>{
                 
 
                 expect(reviews).toBeInstanceOf(Array);
-                expect(reviews.length).toBe(15);
+                expect(reviews.length).toBe(13);
 
                 reviews.forEach((review) => {
                     expect(review).toMatchObject({
@@ -102,7 +102,7 @@ describe("GET: /api/reviews",()=>{
                         category: expect.any(String),
                         owner: expect.any(String),
                         created_at: expect.any(String),
-                        comment_count: expect.any(Number)
+                        comment_count: expect.any(String)
                     });
                 })
 

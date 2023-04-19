@@ -51,6 +51,7 @@ if(sort_by && order || !sort_by && order || sort_by && !order || !sort_by && !or
     return db.query(queryStr, queryValues)
     .then((result) => {
         return result.rows
+
     })
 }
 

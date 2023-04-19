@@ -109,6 +109,17 @@ describe("GET: /api/reviews",()=>{
                 expect(reviews).toBeSortedBy('created_at', { descending: true });
             })
     })
+
+    // test("200: Correct sort when given order query of ASC", ()=>{
+    //     return request(app)
+    //         .get("/api/reviews?order=asc")
+    //         .expect(200)
+    //         .then(({body})=>{
+    //             expect(body.reviews).toBeSortedBy("created_at", {
+    //                 descending: false
+    //             })
+    //         })
+    // })
 })
 
 describe("GET: /api/reviews/:review_id/comments", ()=>{

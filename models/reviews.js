@@ -16,75 +16,54 @@ exports.fetchSingleReview = (id)=>{
    })
 }
 
-exports.fetchReviews = (order, sort, category) => {
-    // const queryString = `
-    //     SELECT
-    //         reviews.title,
-    //         reviews.owner,
-    //         reviews.review_id,
-    //         reviews.category,
-    //         reviews.review_img_url,
-    //         reviews.created_at,
-    //         reviews.designer,
-    //         reviews.votes,
-    //         CAST(COUNT(comments.review_id) AS INT) AS comment_count
-    //     FROM reviews
-    //     FULL OUTER JOIN comments
-    //     ON comments.review_id = reviews.review_id
-    // ` 
+exports.fetchReviews = (category, sort_by, order) => {
+    const queryValues = [];
+    let queryStr = `SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, reviews.designer, COUNT(comments.review_id) AS comment_count FROM reviews FULL OUTER JOIN comments ON comments.review_id = reviews.review_id`
+    if (category){
+        queryValues.push(category)
+        queryStr += ` WHERE reviews.category = $1`
+    }
+    if (sort_by){
+        if (!['review_id', 'title', 'category', 'designer', 'owner', 'review_img_url', 'created_at', 'votes'].includes(sort_by)){
+        return Promise.reject({status: 400, msg: "Invalid sort query"})
+    }
+    }
+    if (order) {
+        if (!['ASC', 'DESC'].includes(order)){
+        return Promise.reject({status: 400, msg: "Invalid order query"})
+    }
+}
+if(sort_by && order || !sort_by && order || sort_by && !order || !sort_by && !order){
+    queryStr += ` GROUP BY reviews.review_id ORDER BY reviews.`
+}
+    if (sort_by && order){
+        queryStr += `${sort_by} ${order};`
+    }
+    if (sort_by && !order){
+        queryStr += `${sort_by} DESC;`
+    }
+    if (!sort_by && order){
+        queryStr += `created_at ${order};`
+    }
+    if (!sort_by && !order){
+        queryStr += `created_at DESC;`
+    }
+    return db.query(queryStr, queryValues)
+    .then((result) => {
+        return result.rows
 
-    // const queryArray = []
-    
-    // // Category insertion here
-
-    // queryString += `GROUP BY reviews.review_id`
-
-
-
-    // if(order === "asc" || order === "desc"){
-    //     console.log("Correct string")
-    //     //queryString += `ORDER BY ${sort} ${order}`
-    // } else{
-    //     console.log("WRong")
-    //     return Promise.reject({
-    //         status: 400,
-    //         msg: "400 Invalid order query"
-    //     })
-    // }
-
-    // return db.query(queryString, queryArray).then((data) => {
-    //     console.log(data);
-    //     return data.rows;
-    // })
-
-    return db.query(`
-        SELECT 
-            title,
-            owner,
-            reviews.review_id,
-            category,
-            review_img_url,
-            reviews.created_at,
-            MAX(COALESCE(comments.votes, 0)) AS votes,
-            designer,
-            CAST(COUNT(comments.review_id) AS INT) AS comment_count
-        FROM reviews
-        LEFT JOIN comments
-        ON comments.review_id = reviews.review_id
-        GROUP BY 
-            title,
-            owner,
-            reviews.review_id,
-            category,
-            review_img_url,
-            reviews.created_at,
-            comments.votes,
-            designer
-        ORDER BY reviews.created_at DESC
-    `).then((data)=>{
-        return data.rows;
     })
 }
+
+exports.checkIfCategoryExists = (category) => {
+    return db.query(`SELECT * FROM categories WHERE slug = $1;`, [category])
+    .then((result) => {
+        if (result.rowCount === 0) {
+            return Promise.reject({status: 404, msg: "Category not found"})
+        }
+    })
+}
+
 exports.updateVotes = (reviewID, increaseVote) => {
     return db.query(`
         UPDATE reviews

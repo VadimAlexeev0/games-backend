@@ -1,4 +1,4 @@
-const {fetchSingleReview, fetchReviews, updateVotes} = require("../models")
+const {fetchSingleReview, fetchReviews, updateVotes, checkIfCategoryExists} = require("../models")
 
 exports.getReviewByID = (req, res, next)=>{
     const { review_id } = req.params;
@@ -15,28 +15,32 @@ exports.getReviewByID = (req, res, next)=>{
 }
 
 exports.getReviews = (req, res, next) => {
-    const { 
-        order = "desc",
-        sort_by = "created_at", 
-        category
-    } = req.query;
+    const { category, sort_by, order } = req.query;
 
-    // if(category){
-    //     // Check if category exists
-    // }
-    
-    console.log(order, sort_by, category);
-
-    fetchReviews(order, sort_by, category).then((reviews)=>{
-        // console.log(reviews)
-        res.status(200).send({
-            "reviews": reviews
+  if (category) {
+    checkIfCategoryExists(category).then(() => {
+      return fetchReviews(category, sort_by, order)
+        .then((reviews) => {
+          if (reviews.length !== 0) {
+            res.status(200).send({ reviews: reviews });
+          }
+          if (reviews.length === 0) {
+            res.status(200).send({ msg: "No reviews for selected category" });
+          }
         })
-    })
-    .catch((err)=>{
-        console.log(err)
-        next(err)
-    })
+        ;
+    }).catch((err) => {
+      next(err);
+    });
+  } else {
+    return fetchReviews(category, sort_by, order)
+      .then((reviews) => {
+        res.status(200).send({ reviews: reviews });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } 
 }
 
 exports.patchReviewByID = (req, res, next) => {
